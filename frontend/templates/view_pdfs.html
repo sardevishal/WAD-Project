@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}All Study Materials - SPPU Study Materials Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card mb-3">
+        <div class="card-body text-center">
+            <h1 class="card-title">📋 All Study Materials</h1>
+            <p class="card-subtitle">Complete collection of uploaded study materials across all semesters</p>
+            <div class="flex gap-2 justify-center mt-3">
+                <a href="/semesters" class="btn btn-secondary">← Browse by Semester</a>
+                {% if session.get('admin_logged_in') %}
+                    <a href="/upload" class="btn btn-primary">📤 Upload New Material</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Materials Section -->
+    <div class="container">
+        {% if files or subjects %}
+        <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 class="card-title">📚 Available Materials</h2>
+                    <p class="card-subtitle">
+                        {% if selected_subject and selected_subject != 'All' %}
+                            Showing <b>{{ files|length }}</b> files for <b>{{ selected_subject }}</b>
+                        {% else %}
+                            <b>{{ files|length }}</b> total files available
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <!-- Filter Dropdown -->
+                <form method="GET" action="/pdfs" class="flex gap-1" id="filter-form">
+                    <select name="subject" class="form-input" style="width: auto; min-width: 200px;" onchange="document.getElementById('filter-form').submit()">
+                        <option value="All">All Subjects</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject }}" {% if selected_subject == subject %}selected{% endif %}>{{ subject }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="file-list">
+                    {% for file in files %}
+                    <div class="card file-item">
+                        <div style="flex-grow: 1;">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 style="margin: 0; color: var(--text-primary); font-size: 1.15rem;">{{ file.semester }} - {{ file.subject }}</h4>
+                                <span class="badge badge-secondary" style="font-size: 0.7rem;">Verified</span>
+                            </div>
+                            <p style="margin: 0.5rem 0; color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                                📄 {{ file.filename }}
+                            </p>
+                            <small class="text-muted" style="font-size: 0.8rem;">Ref: {{ file.get('_id', 'N/A')|string|truncate(12) }} • 📥 Downloads: {{ file.get('downloads', 0) }}</small>
+                        </div>
+                        <div class="file-item-actions">
+                            {% if session.get('student_logged_in') %}
+                                <a href="/favorite/toggle/{{ file.file_id }}" class="btn btn-secondary btn-icon" title="Save to Hub">
+                                    ❤️
+                                </a>
+                            {% endif %}
+                            <button onclick="openPdfModal('/pdf/{{ file.file_id }}', '{{ file.filename }}')" class="btn btn-secondary" style="padding: 0.6rem 1.2rem;">
+                                👁️ View
+                            </button>
+                            <a href="/pdf/{{ file.file_id }}" class="btn btn-primary" style="padding: 0.6rem 1.2rem;">
+                                📥 Download
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card text-center">
+            <div class="card-body">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                <h2 class="card-title">
+                    {% if selected_subject and selected_subject != 'All' %}
+                        No files found for {{ selected_subject }}
+                    {% else %}
+                        No Materials Available
+                    {% endif %}
+                </h2>
+                <div class="flex gap-2 justify-center mt-3">
+                    <a href="/pdfs" class="btn btn-secondary">Clear Filter</a>
+                    {% if session.get('admin_logged_in') %}
+                        <a href="/upload" class="btn btn-primary">📤 Upload First Material</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

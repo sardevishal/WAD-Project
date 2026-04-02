@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - StudyPortal{% endblock %}
+
+{% block content %}
+<div class="container mt-3 mb-3">
+    <!-- Header Hero -->
+    <div class="card mb-3" style="padding: 3rem;">
+        <div class="text-center">
+            <h1 class="card-title" style="font-size: 2.2rem; margin-bottom: 0.5rem;">📊 Admin Dashboard</h1>
+            <p class="card-subtitle" style="font-size: 1.1rem; margin-bottom: 2.5rem;">Unified overview of material distribution and engagement</p>
+            <div class="flex gap-2 justify-center">
+                <a href="/upload" class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1.1rem;">
+                    📤 Upload Material
+                </a>
+                <a href="/pdfs" class="btn btn-secondary" style="padding: 0.8rem 1.5rem; font-size: 1rem;">
+                    📋 All Materials
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tier-1 Metrics -->
+    <div class="grid grid-3 mb-3">
+        <div class="card text-center" style="border-top: 4px solid var(--primary); padding: 2.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1.5rem;">📄</div>
+            <h2 class="card-title" style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ total_files }}</h2>
+            <p class="card-subtitle" style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Total Documents</p>
+        </div>
+        <div class="card text-center" style="border-top: 4px solid var(--secondary); padding: 2.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1.5rem;">🎓</div>
+            <h2 class="card-title" style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ sem_stats|length }}</h2>
+            <p class="card-subtitle" style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Semesters Active</p>
+        </div>
+        <div class="card text-center" style="border-top: 4px solid var(--accent); padding: 2.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1.5rem;">📈</div>
+            <h2 class="card-title" style="font-size: 2rem; margin-bottom: 0.5rem;">Healthy</h2>
+            <p class="card-subtitle" style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Cloud Status</p>
+        </div>
+    </div>
+
+    <div class="grid grid-2">
+        <!-- 🔥 Engagement Ranking -->
+        <div class="card" style="padding: 2rem;">
+            <div class="mb-2">
+                <h3 class="card-title" style="font-size: 1.4rem;">🔥 Trending Materials</h3>
+                <p class="card-subtitle">Top engagement by download velocity</p>
+            </div>
+            <div style="display: grid; gap: 1.5rem;">
+                {% for file in popular_files %}
+                <div class="flex justify-between items-center" style="padding: 1.25rem; background: var(--glass-bg); border-radius: var(--radius-sm); border: 1px solid var(--glass-border);">
+                    <div>
+                        <p style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">{{ file.filename }}</p>
+                        <small class="text-muted" style="font-weight: 600;">{{ file.subject }} • {{ file.semester }}</small>
+                    </div>
+                    <span class="badge badge-accent" style="padding: 0.4rem 0.8rem;">{{ file.get('downloads', 0) }} Views</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 📊 Statistical Distribution -->
+        <div class="card" style="padding: 2rem;">
+            <div class="mb-2">
+                <h3 class="card-title" style="font-size: 1.4rem;">📊 Semester Load distribution</h3>
+                <p class="card-subtitle">Percentage balance of content across curriculum</p>
+            </div>
+            <div style="display: grid; gap: 2rem;">
+                {% for sem, count in sem_stats.items() %}
+                {% set percentage = (count / total_files * 100) if total_files > 0 else 0 %}
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span style="font-weight: 700; color: var(--text-primary);">{{ sem }}</span>
+                        <span class="text-accent" style="font-weight: 800; font-size: 1.1rem;">{{ percentage|round(1) }}%</span>
+                    </div>
+                    <div style="width: 100%; background: var(--glass-border); height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="progress-bar-fill admin-progress" data-progress="{{ percentage|round(1) }}"></div>
+                    </div>
+                    <small class="text-muted" style="display: block; margin-top: 0.5rem; font-weight: 600;">{{ count }} documents sharing this slot</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Safe hook for progress bars to avoid linter errors
+    window.addEventListener('DOMContentLoaded', () => {
+        const bars = document.querySelectorAll('.admin-progress');
+        setTimeout(() => {
+            bars.forEach(bar => {
+                const pct = bar.getAttribute('data-progress');
+                bar.style.width = pct + '%';
+            });
+        }, 100);
+    });
+</script>
+{% endblock %}

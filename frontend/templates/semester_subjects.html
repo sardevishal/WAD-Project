@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Subjects for {{ semester }} - StudyPortal{% endblock %}
+
+{% block content %}
+<div class="container mt-3 mb-3">
+    <!-- Header Hero -->
+    <div class="card mb-3" style="padding: 3rem; text-align: center;">
+        <div style="font-size: 3.5rem; margin-bottom: 1.5rem;">📚</div>
+        <h1 class="welcome-title" style="margin-bottom: 0.5rem; font-size: 2.5rem;">{{ semester }} Subjects</h1>
+        <p class="welcome-subtitle" style="margin-bottom: 2rem;">Access curated engineering materials for the SPPU curriculum</p>
+        <div class="flex gap-2 justify-center">
+            <a href="/semesters" class="btn btn-secondary" style="padding: 0.8rem 1.5rem;">
+                ← Back to All Semesters
+            </a>
+        </div>
+    </div>
+
+    <!-- Subjects Grid -->
+    <div class="grid grid-3">
+        {% for subject in subjects %}
+        {% set has_files = subject_files.get(subject, 0) > 0 %}
+        <div class="card {{ 'active-subject' if has_files else 'empty-subject' }}" style="padding: 3rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 320px; background: var(--glass-bg);">
+            <div>
+                <div class="flex justify-between items-start mb-2">
+                    <h2 class="card-title" style="font-size: 1.6rem; margin: 0;">{{ subject }}</h2>
+                    {% if has_files %}
+                        <span class="badge badge-accent" style="padding: 0.5rem 1rem;">{{ subject_files[subject] }} FILES</span>
+                    {% else %}
+                        <span class="badge badge-secondary" style="padding: 0.5rem 1rem;">EMPTY</span>
+                    {% endif %}
+                </div>
+                
+                <div style="margin-top: 1.5rem; margin-bottom: 2rem;">
+                    <p class="text-muted mb-1" style="font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1.5px; opacity: 0.7;">
+                        Curriculum Subject
+                    </p>
+                    <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin: 0;">
+                        Deep dive into {{ subject }} with our curated collection of notes, PYQs, and resources.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex justify-end" style="margin-top: 2rem;">
+                {% if has_files %}
+                    <a href="/pdfs/{{ semester }}/{{ subject }}" class="btn btn-primary" style="padding: 0.8rem 1.5rem; width: 100%; justify-content: center; font-weight: 600;">
+                        🔥 Access Materials
+                    </a>
+                {% else %}
+                    <button class="btn btn-secondary" disabled style="width: 100%; justify-content: center; opacity: 0.5; padding: 0.8rem 1.5rem;">
+                        ⏱️ Rolling Out Soon
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

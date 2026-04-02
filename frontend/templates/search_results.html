@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results for "{{ query }}" - SPPU Study Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">🔍 Search Results</h1>
+            <p class="card-subtitle">Showing results for <b>"{{ query }}"</b></p>
+        </div>
+    </div>
+
+    {% if files %}
+    <div class="card mt-2">
+        <div class="card-header">
+            <h2 class="card-title">📚 Matching Materials</h2>
+            <p class="card-subtitle">{{ files|length }} matches found</p>
+        </div>
+        <div class="card-body">
+            <div class="file-list" style="display: grid; gap: 1rem;">
+                {% for file in files %}
+                <div class="file-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--glass-bg); border-radius: var(--radius-sm); border: 1px solid var(--glass-border);">
+                    <div>
+                        <h4 style="margin: 0; color: var(--text-primary);">{{ file.subject }}</h4>
+                        <p style="margin: 0.25rem 0; color: var(--text-secondary); font-size: 0.9rem;">📄 {{ file.filename }}</p>
+                        <span class="badge badge-primary">{{ file.semester }}</span>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="openPdfModal('/pdf/{{ file.file_id }}', '{{ file.filename }}')" class="btn btn-secondary">
+                            👁️ View
+                        </button>
+                        <a href="/pdf/{{ file.file_id }}" class="btn btn-primary" download>
+                            📥 Download
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card text-center mt-2">
+        <div class="card-body">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">🔎</div>
+            <h2 class="card-title">No matches found</h2>
+            <p class="card-subtitle">We couldn't find anything matching your search. Try different keywords or browse semesters.</p>
+            <div class="flex gap-2 justify-center mt-3">
+                <a href="/semesters" class="btn btn-primary">🎓 Browse Semesters</a>
+                <a href="/" class="btn btn-secondary">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

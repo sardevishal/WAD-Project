@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - SPPU Study Material Portal{% endblock %}
+
+{% block content %}
+<section class="welcome-section">
+    <div class="container fade-in-up">
+        <h1 class="welcome-title">
+            SPPU IT Study Portal
+        </h1>
+        <p class="welcome-subtitle">
+            Your centralized hub for semester-wise study materials, previous year papers, and academic resources designed for SPPU students.
+        </p>
+        <div class="flex gap-2 justify-center mt-3">
+            <a href="/semesters" class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1.1rem;">
+                🎓 Browse All Materials
+            </a>
+            {% if not session.get('student_logged_in') and not session.get('admin_logged_in') %}
+                <a href="/signup" class="btn btn-secondary" style="padding: 0.8rem 1.5rem; font-size: 1rem;">
+                    ✨ Join Community
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Notice Board Section -->
+{% if notices %}
+<section class="container mb-3 mt-3">
+    <div class="card" style="border-left: 5px solid var(--accent);">
+        <div class="flex justify-between items-center mb-1">
+            <h2 class="card-title" style="margin:0; color: var(--accent);">🔔 Recent Notices</h2>
+            <span class="badge badge-accent">Latest Updates</span>
+        </div>
+        <div class="card-body">
+            <div style="display: grid; gap: 1rem;">
+                {% for notice in notices %}
+                <div style="padding: 1rem; border-bottom: 1px solid var(--glass-border);">
+                    <p style="margin:0; font-weight: 500;">{{ notice.message }}</p>
+                    <small class="text-muted">{{ notice.created_at.strftime('%d %b %Y') }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Key Features -->
+<section class="container mb-3 mt-3">
+    <div class="grid grid-3">
+        <div class="card text-center">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📂</div>
+            <h3 class="card-title">Structured Context</h3>
+            <p class="card-subtitle">Every file is categorized by semester and subject for zero-friction navigation.</p>
+        </div>
+        <div class="card text-center">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔎</div>
+            <h3 class="card-title">Smart Search</h3>
+            <p class="card-subtitle">Find specific notes or question papers instantly with our global live search.</p>
+        </div>
+        <div class="card text-center">
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">❤️</div>
+            <h3 class="card-title">Personalized</h3>
+            <p class="card-subtitle">Save your most-used materials as favorites and track your study milestones.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Post Notification - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">📣 Post New Notification</h1>
+            <p class="card-subtitle">Broadcast messages to all students on the homepage</p>
+            
+            <form method="POST" class="mt-2" style="max-width: 600px;">
+                <div class="form-group">
+                    <label class="form-label">Message Content</label>
+                    <textarea name="message" class="form-input" rows="4" placeholder="e.g. New SEM 5 Practice Papers uploaded! Check them out." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">🚀 Post Notification</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header">
+            <h2 class="card-title">📋 Previous Notifications</h2>
+        </div>
+        <div class="card-body">
+            {% if notices %}
+                <div style="display: grid; gap: 1rem;">
+                    {% for notice in notices %}
+                    <div style="padding: 1rem; background: var(--glass-bg); border-radius: var(--radius-sm); border-left: 4px solid var(--primary);">
+                        <p style="margin: 0;">{{ notice.message }}</p>
+                        <small class="text-muted">{{ notice.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No notifications have been posted yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

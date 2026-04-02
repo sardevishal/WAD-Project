@@ -1,0 +1,122 @@
+/* ================================
+   🎭 PDF View Modal
+   ================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 2rem;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 1rem 1.5rem;
+    background: var(--bg-navbar);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+
+.modal-close {
+    background: var(--glass-bg);
+    border: none;
+    color: var(--text-primary);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.pdf-iframe {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.search-container {
+    position: relative;
+    max-width: 400px;
+    flex-grow: 1;
+    margin: 0 2rem;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+
+.navbar-search {
+    padding-left: 2.5rem !important;
+    height: 40px;
+    background: var(--bg-card) !important;
+}
+
+/* 🌓 Light Mode Overrides */
+body.light-mode {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-hover: #f1f5f9;
+    --bg-navbar: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --glass-bg: rgba(0, 0, 0, 0.05);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .navbar-search {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0;
+}
+
+/* Alerts */
+.alert-success { border-left: 4px solid #14b8a6; }
+.alert-error { border-left: 4px solid #ef4444; }
+.alert-info { border-left: 4px solid #6366f1; }
+.alert-warning { border-left: 4px solid #f59e0b; }

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}My Favorites ❤️ - SPPU Study Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="card mb-3">
+        <div class="card-body text-center">
+            <h1 class="card-title">❤️ My Favorites</h1>
+            <p class="card-subtitle">Your personalized collection of study materials</p>
+        </div>
+    </div>
+
+    {% if files %}
+    <div class="grid grid-2">
+        {% for file in files %}
+        <div class="card file-item">
+            <div style="flex-grow: 1;">
+                <div class="flex items-center gap-2 mb-1">
+                    <h3 class="card-title" style="margin: 0; font-size: 1.2rem;">{{ file.subject }}</h3>
+                    <span class="badge badge-primary">{{ file.semester }}</span>
+                </div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                    📄 {{ file.filename }}
+                </p>
+            </div>
+            <div class="file-item-actions">
+                <button onclick="openPdfModal('/pdf/{{ file.file_id }}', '{{ file.filename }}')" class="btn btn-secondary btn-icon" title="View">
+                    👁️
+                </button>
+                <a href="/pdf/{{ file.file_id }}" class="btn btn-primary btn-icon" download title="Download">
+                    📥
+                </a>
+                <a href="/favorite/toggle/{{ file.file_id }}" class="btn btn-secondary btn-icon" style="color: #ef4444;" title="Remove">
+                    ✖️
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card text-center mt-3">
+        <div class="card-body">
+            <div style="font-size: 4rem; margin-bottom: 1.5rem;">❤️</div>
+            <h2 class="card-title">You don't have any favorites yet</h2>
+            <p class="card-subtitle">Start browsing semesters and save materials as favorites to see them here.</p>
+            <div class="flex gap-2 justify-center mt-3">
+                <a href="/semesters" class="btn btn-primary">🎓 Start Browsing</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SPPU Study Portal{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+</head>
+<body>
+    <!-- Toast System -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <!-- Hidden Messages for JS -->
+    <div id="flash-data" style="display: none;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="msg-box" data-category="{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="/" class="navbar-logo">
+                <div class="navbar-logo-icon">🖇️</div>
+                <div class="navbar-logo-text">StudyPortal</div>
+            </a>
+            
+            <form action="/search" method="GET" class="flex items-center" style="flex-grow: 1; max-width: 400px; margin: 0 2rem;">
+                <input type="text" name="q" class="form-input" placeholder="Search subjects or materials..." style="padding: 0.45rem 1rem; border-radius: 20px;">
+            </form>
+
+            <ul class="navbar-nav">
+                <li><a href="/" class="navbar-link">Home</a></li>
+                <li><a href="/semesters" class="navbar-link">Browse</a></li>
+                {% if session.get('admin_logged_in') %}
+                    <li><a href="/admin/dashboard" class="navbar-link">Dashboard</a></li>
+                    <li><a href="javascript:void(0)" onclick="openLogoutModal()" class="navbar-link">Logout</a></li>
+                {% elif session.get('student_logged_in') %}
+                    <li><a href="/favorites" class="navbar-link">❤️ Favs</a></li>
+                    <li><a href="javascript:void(0)" onclick="openLogoutModal()" class="navbar-link">Logout</a></li>
+                {% else %}
+                    <li><a href="/student/login" class="navbar-link">Login</a></li>
+                    <li><a href="/signup" class="navbar-link">Signup</a></li>
+                    <li><a href="/login" class="navbar-link">Admin</a></li>
+                {% endif %}
+                
+                <li>
+                    <button id="theme-toggle" class="btn btn-secondary btn-icon" title="Toggle Theme">
+                        <span id="theme-icon">🌙</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="fade-in-up" style="min-height: 80vh;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Modals -->
+    <div id="pdf-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-pdf-title" style="margin: 0;">PDF Preview</h3>
+                <button class="btn btn-secondary btn-icon" onclick="closePdfModal()">✕</button>
+            </div>
+            <iframe id="pdf-viewer-frame" class="pdf-iframe" src=""></iframe>
+        </div>
+    </div>
+
+    <div id="logout-modal" class="modal-overlay">
+        <div class="card" style="max-width: 400px; width: 90%; text-align: center; padding: 3rem;">
+            <div style="font-size: 3rem; margin-bottom: 2rem;">🚪</div>
+            <h2 class="card-title">Ready to Leave?</h2>
+            <p class="card-subtitle mb-3">Ending your study session now? We'll be here when you return.</p>
+            <div class="flex gap-2 justify-center mt-3">
+                <button class="btn btn-secondary" onclick="closeLogoutModal()">Cancel</button>
+                <a href="/logout" class="btn btn-primary">Yes, Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Engine
+        const body = document.body;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        if (localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            themeIcon.textContent = '☀️';
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const isLight = body.classList.contains('light-mode');
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                if (themeIcon) themeIcon.textContent = isLight ? '☀️' : '🌙';
+            });
+        }
+
+        // Toast Engine
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '🔔';
+            const msg = String(message);
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (msg.includes('❤️')) icon = '❤️';
+
+            toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.4s ease-out reverse forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
+        }
+
+        // Initialize Toasts from Hidden Data
+        window.addEventListener('DOMContentLoaded', () => {
+            const msgs = document.querySelectorAll('#flash-data .msg-box');
+            msgs.forEach(m => {
+                const category = m.getAttribute('data-category');
+                const type = category === 'success' ? 'success' : category === 'error' ? 'error' : 'info';
+                showToast(m.textContent, type);
+            });
+        });
+
+        // PDF Modal
+        function openPdfModal(url, title) {
+            const titleEl = document.getElementById('modal-pdf-title');
+            const frameEl = document.getElementById('pdf-viewer-frame');
+            const modalEl = document.getElementById('pdf-modal');
+            if (titleEl) titleEl.textContent = title;
+            if (frameEl) frameEl.src = url;
+            if (modalEl) modalEl.style.display = 'flex';
+            body.style.overflow = 'hidden';
+        }
+
+        function closePdfModal() {
+            const frameEl = document.getElementById('pdf-viewer-frame');
+            const modalEl = document.getElementById('pdf-modal');
+            if (frameEl) frameEl.src = '';
+            if (modalEl) modalEl.style.display = 'none';
+            body.style.overflow = 'auto';
+        }
+
+        // Logout Modal
+        function openLogoutModal() {
+            const modalEl = document.getElementById('logout-modal');
+            if (modalEl) modalEl.style.display = 'flex';
+            body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            const modalEl = document.getElementById('logout-modal');
+            if (modalEl) modalEl.style.display = 'none';
+            body.style.overflow = 'auto';
+        }
+
+        window.addEventListener('keydown', (e) => { 
+            if (e.key === 'Escape') {
+                closePdfModal();
+                closeLogoutModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - SPPU Study Material Portal</title>
+  <meta name="description" content="Get in touch with SPPU Study Portal team for queries, feedback, or support">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <!-- Enhanced Navbar -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <a href="/" class="navbar-logo">
+        <div class="navbar-logo-icon">📚</div>
+        <div class="navbar-logo-text">StudyPortal</div>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="/" class="navbar-link">Home</a></li>
+        <li><a href="/semesters" class="navbar-link">Browse Materials</a></li>
+        <li><a href="/contact" class="navbar-link">Contact</a></li>
+        <li><a href="/login" class="navbar-link">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contact Section -->
+  <main class="container mt-3">
+    <div class="text-center mb-3">
+      <div
+        style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1.5rem auto; box-shadow: var(--shadow-hover);">
+        📧</div>
+      <h1 class="welcome-title" style="font-size: 3rem; margin-bottom: 1rem;">Get In Touch</h1>
+      <p class="welcome-subtitle" style="max-width: 700px; margin: 0 auto;">
+        Have questions, suggestions, or feedback? We'd love to hear from you!
+        Reach out to us through any of the channels below.
+      </p>
+    </div>
+
+    <div class="grid grid-3" style="margin-top: 3rem;">
+      <!-- Email Card -->
+      <div class="card text-center">
+        <div class="card-body">
+          <div
+            style="width: 60px; height: 60px; background: rgba(99, 102, 241, 0.15); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem auto;">
+            📧
+          </div>
+          <h3 class="card-title">Email Us</h3>
+          <p class="card-subtitle" style="margin-bottom: 1rem;">Send us an email anytime</p>
+          <a href="mailto:ps175581@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+            ps175581@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <!-- GitHub Card -->
+      <div class="card text-center">
+        <div class="card-body">
+          <div
+            style="width: 60px; height: 60px; background: rgba(20, 184, 166, 0.15); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem auto;">
+            💻
+          </div>
+          <h3 class="card-title">GitHub</h3>
+          <p class="card-subtitle" style="margin-bottom: 1rem;">Contribute or report issues</p>
+          <a href="https://github.com/Pratikshinde99" target="_blank" rel="noopener noreferrer"
+            style="color: var(--secondary); text-decoration: none; font-weight: 600;">
+            @Pratikshinde99
+          </a>
+        </div>
+      </div>
+
+      <!-- Support Card -->
+      <div class="card text-center">
+        <div class="card-body">
+          <div
+            style="width: 60px; height: 60px; background: rgba(245, 158, 11, 0.15); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1rem auto;">
+            💬
+          </div>
+          <h3 class="card-title">Support</h3>
+          <p class="card-subtitle" style="margin-bottom: 1rem;">Need help with the portal?</p>
+          <a href="mailto:support@studyportal.com"
+            style="color: var(--accent); text-decoration: none; font-weight: 600;">
+            Get Support
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info Section -->
+    <div class="card" style="margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+      <div class="card-body">
+        <h2 class="card-title text-center" style="margin-bottom: 1.5rem;">About This Project</h2>
+        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+          The SPPU Study Material Portal is designed to help Information Technology students at
+          Savitribai Phule Pune University access organized study materials, previous year papers,
+          and resources for all semesters.
+        </p>
+        <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+          This platform is built with ❤️ to make learning easier and more accessible for students.
+          All materials are organized semester-wise and subject-wise for quick access.
+        </p>
+
+        <div class="flex gap-2 justify-center" style="margin-top: 2rem;">
+          <a href="/semesters" class="btn btn-primary">
+            📚 Browse Materials
+          </a>
+          <a href="/" class="btn btn-secondary">
+            ← Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid grid-3" style="margin-top: 3rem; margin-bottom: 3rem;">
+      <div class="card text-center">
+        <div class="card-body">
+          <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">📚</h3>
+          <h4 class="card-title" style="font-size: 1.1rem;">Organized Content</h4>
+          <p class="card-subtitle">Semester and subject-wise materials</p>
+        </div>
+      </div>
+
+      <div class="card text-center">
+        <div class="card-body">
+          <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</h3>
+          <h4 class="card-title" style="font-size: 1.1rem;">Fast Access</h4>
+          <p class="card-subtitle">Quick download and viewing</p>
+        </div>
+      </div>
+
+      <div class="card text-center">
+        <div class="card-body">
+          <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</h3>
+          <h4 class="card-title" style="font-size: 1.1rem;">Student Focused</h4>
+          <p class="card-subtitle">Designed for SPPU IT students</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
